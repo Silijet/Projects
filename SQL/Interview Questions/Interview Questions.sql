@@ -63,6 +63,26 @@ UNION ALL
     ,user2
     ,msg_count
 FROM fb.messages)
-ORDER BY date
+ORDER BY date;
 
+--This will sum up all the msg_count from the unioned table. Grouped by user and date, then ordered by date.
+SELECT 
+    tot.date
+    ,tot.user1
+    ,SUM(tot.msg_count)
+FROM
+    ((SELECT
+        date
+        ,user1
+        ,msg_count
+    FROM fb.messages)
+    UNION ALL
+    SELECT
+        date
+        ,user2
+        ,msg_count
+    FROM fb.messages)
+    AS tot
+GROUP BY tot.user1, tot.date
+ORDER BY tot.date
 --This problem is not very specific. I was initially under the impression that conversation implied unique user1 to user2 data. Not just the msg_count. Also this does not sum up the msg_count data, so users have different numbers for sending and receiving.
