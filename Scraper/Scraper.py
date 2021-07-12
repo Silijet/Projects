@@ -1,5 +1,5 @@
 #Get beautiful soup
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from datetime import datetime
 import requests
 import sys
@@ -31,16 +31,30 @@ def main():
                 # Need to get data returning in a row corresponding to the header
                 # print(rows[0].find('font').string)
 
+                for row in rows:
+                    fonts = row.find_all('font')
+                    row_data = [
+                        text_clean(fonts[0]), # Date
+                        text_clean(fonts[1]).split(' /n ')[0], # Location
+                        text_clean(fonts[1]).split(' /n ')[1], # Operator
+                        text_clean(fonts[2]).split(' /n ')[0], # Aircraft Type 
+                        text_clean(fonts[2]).split(' /n ')[1], # Registration
+                        text_clean(fonts[3]) # Fatalities
+                        ]
+                    writer.writerow(row_data)
                 i = i + 1
             except :
                 print ("Unexpected error:", sys.exc_info()[0])
-                raise
-            # parse based on attribute names
-            # and match the format of the header
-            # the data struct you store the data in will be the same data struct as the header
-            # for row in rows: # rows are what you will get from beautiful soup
-            #     # may have to edit to match format
-            #     csv.writerow(row)
+                # raise
+
+# Replaces <br> tags with newlines for parsing
+# Removes potential html comments and unicode whitespace
+def text_clean(soup_node):
+    for e in soup_node.findAll('br'):
+        e.replace_with('/n')
+    text = " ".join(soup_node.find_all(text=lambda t: not isinstance(t, Comment)))
+    text = " ".join(text.split())
+    return text
 
 if __name__ == "__main__":
     main()
