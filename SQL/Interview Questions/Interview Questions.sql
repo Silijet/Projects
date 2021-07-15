@@ -89,3 +89,24 @@ ORDER BY tot.date
 
 -- Write a sql query to find out the overall friend acceptance rate for each day.
 -- friend_requests: ds | sender | receiver | action (sent, accepted, rejected etc.)
+-- Output: ds | acceptance_rate
+-- acceptance_rate calculated by accepted / count(action)
+DECLARE @Amount_Accepted FLOAT(1)
+SET @Amount_Accepted = 
+(
+    SELECT COUNT(*)
+    FROM friend_requests fr
+    WHERE action = 'accepted'
+)
+SELECT
+    fr.ds
+    ,ROUND((@Amount_Accepted / COUNT(action)),3) *100 AS 'Acceptance_Rate'
+FROM friend_requests fr
+GROUP BY ds
+
+--Official Solution
+SELECT ds,
+    COUNT(CASE WHEN action = 'accepted' THEN 1
+          ELSE NULL END) * 1.00 / COUNT(action) * 100 AS 'perc_acceptance'
+FROM friend_requests
+GROUP BY 1
