@@ -86,3 +86,6 @@ FROM
 GROUP BY tot.user1, tot.date
 ORDER BY tot.date
 --This problem is not very specific. I was initially under the impression that conversation implied unique user1 to user2 data. Not just the msg_count. Also this does not sum up the msg_count data, so users have different numbers for sending and receiving.
+
+-- Write a sql query to find out the overall friend acceptance rate for each day.
+-- friend_requests: ds | sender | receiver | action (sent, accepted, rejected etc.)
