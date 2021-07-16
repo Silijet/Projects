@@ -16,7 +16,7 @@ FROM
     --Tuncating the timestamp down to date information only
     AND CAST(i.ts AS Date) = CAST(w.ts AS Date)
 --Grouping by the date will make the output make more sense
-GROUP BY 1
+GROUP BY 1;
 
 --Optimization? Cast could actually slow this down a bit. Might not be the most efficient way to get the date.
 --Ram suggested convert()
@@ -31,7 +31,7 @@ GROUP BY 1
 SELECT TOP 1 business_name
     ,review_text
 FROM yelp_reviews
-ORDER BY cool DESC 
+ORDER BY cool DESC;
 
 --Official Solution
 SELECT
@@ -44,7 +44,7 @@ FROM
         SELECT MAX(cool) AS max_cool
         FROM yelp_reviews
     ) mc
-    ON reviews.cool = mc.cool
+    ON reviews.cool = mc.cool;
 
 --3) Facebook. Find out the number of conversations (send or receive) by each user by date.
 --fb_messages: id | date | user1 | user 2 | msg_count
@@ -84,7 +84,7 @@ FROM
     FROM fb.messages)
     AS tot
 GROUP BY tot.user1, tot.date
-ORDER BY tot.date
+ORDER BY tot.date;
 --This problem is not very specific. I was initially under the impression that conversation implied unique user1 to user2 data. Not just the msg_count. Also this does not sum up the msg_count data, so users have different numbers for sending and receiving.
 
 -- Write a sql query to find out the overall friend acceptance rate for each day.
@@ -102,11 +102,18 @@ SELECT
     fr.ds
     ,ROUND((@Amount_Accepted / COUNT(action)),3) *100 AS 'Acceptance_Rate'
 FROM friend_requests fr
-GROUP BY ds
+GROUP BY ds;
 
 --Official Solution
 SELECT ds,
     COUNT(CASE WHEN action = 'accepted' THEN 1
           ELSE NULL END) * 1.00 / COUNT(action) * 100 AS 'perc_acceptance'
 FROM friend_requests
-GROUP BY 1
+GROUP BY 1;
+
+
+--Microsoft. Find the total number of downloads for paying and non-paying users by date. Include only records where non-paying customers have more downloads than paying customers. The output should be sorted by earliest date first and contain 3 columns date, non-paying downloads, paying downloads.
+--Tables: ms_user_dimension, ms_acc_dimension, ms_download_facts
+--ms_user_dimension: user_id | acc_id
+--ms_acc_dimension: acc_id | paying_customer
+--ms_download_facts: date | user_id | downloads
