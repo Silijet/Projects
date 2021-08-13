@@ -47,15 +47,25 @@ twitter_employee: id | first_name | last_name | age | sex | employee_title | dep
 
 --Need window function here because cannot just output top 3 salaries (specifically need top 3 salaries from each department).
 --Group by department. Then take top 3 of each department.
-SELECT  department
-        ,salary
-    SELECT department
+SELECT
+    department
+    ,salary
+    ,rank_id
+FROM(
+    SELECT
+        department
         ,salary
         ,RANK() OVER (PARTITION BY a.department
                         ORDER BY a.salary DESC) AS rank_id
     FROM
-        (SELECT department
+        (SELECT
+            department
             ,salary
         FROM twitter_employee
         GROUP BY department, salary
         ORDER BY department, salary) a
+    ORDER BY 
+        department
+        ,salary DESC
+   ) b
+   WHERE rank_id < 4
