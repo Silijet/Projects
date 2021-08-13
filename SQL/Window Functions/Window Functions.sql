@@ -37,3 +37,5 @@ GROUP BY b.request_date
     ,b.dist_to_cost
     ,b.avg_dist_to_cost
 ORDER BY b.request_date
+
+/*Ranking Example
