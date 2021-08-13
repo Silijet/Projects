@@ -47,6 +47,7 @@ twitter_employee: id | first_name | last_name | age | sex | employee_title | dep
 
 --Need window function here because cannot just output top 3 salaries (specifically need top 3 salaries from each department).
 --Group by department. Then take top 3 of each department.
+
 SELECT
     department
     ,salary
@@ -68,4 +69,26 @@ FROM(
         department
         ,salary DESC
    ) b
-   WHERE rank_id < 4
+WHERE rank_id < 4
+
+/*N-tile Example. Splitting data into bins.
+Netflix Top Percentile Fraud
+ABC Corp is a mid-sized insurer in the US and in the recent past their fradulent claims have increased significantly for their personal auto insurance portfolio. They have developed a ML based predictive model to claim adjusters for the top 5 percentile of claims identified by the model. Your objective is to identify the top 5 percentile claims from each state. Your output should be policy number, state, claim cost, and fraud score.
+
+fraud_score: policy_num | state | claim_cost | fraud_score */
+
+--Need top 5 percentile in fraud_score, PER STATE
+
+SELECT
+    policy_num
+    ,state
+    ,claim_cost
+    ,fraud_score
+FROM (
+    SELECT 
+        *
+        ,NTILE(100) OVER(PARTITION BY state
+                            ORDER BY fraud_scoer DESC) AS percentile
+    FROM fraud_score
+) a
+WHERE percentile <6
