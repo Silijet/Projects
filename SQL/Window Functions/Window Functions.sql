@@ -39,3 +39,23 @@ GROUP BY b.request_date
 ORDER BY b.request_date
 
 /*Ranking Example
+3 Different Ranking functions: RANK(), RANK_DENSE(), ROW_NUMBER(). May differe depending on implementation.
+Twitter Unique Salaries
+Find the top three unique salaries for each department. Output the department name and the top 3 unique salaries b y each department. Order your results alphabetically by department and then be highest salary to lowest.
+
+twitter_employee: id | first_name | last_name | age | sex | employee_title | department | salary | target | bonus | email*/
+
+--Need window function here because cannot just output top 3 salaries (specifically need top 3 salaries from each department).
+--Group by department. Then take top 3 of each department.
+SELECT  department
+        ,salary
+    SELECT department
+        ,salary
+        ,RANK() OVER (PARTITION BY a.department
+                        ORDER BY a.salary DESC) AS rank_id
+    FROM
+        (SELECT department
+            ,salary
+        FROM twitter_employee
+        GROUP BY department, salary
+        ORDER BY department, salary) a
