@@ -1,0 +1,1 @@
+--First script is to copy everything from [ACT].[dbo].[FileType]. This is not everything from File Definition though so follow the scripts in order.
