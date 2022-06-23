@@ -16,13 +16,75 @@ SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [FileFormatID] FROM [ACT].
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [NameConvention] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
 
 IF (SELECT [FileExtension] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
-  SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
 ELSE
 	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [FileExtension] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
 	
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [Delimitor] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
 
 IF (SELECT [ResultsStatusID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
-  SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
 ELSE
 	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ResultsStatusID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [Active] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [GenerateImages] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+IF (SELECT [FileHeader] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [FileHeader] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [FileDefinitionFilterTypeID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ContentTypeID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+IF (SELECT [AmountFileGenMappingID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [AmountFileGenMappingID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [PortalVisible] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [IsComboFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+IF (SELECT [RequiresUnixNewLine] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [RequiresUnixNewLine] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+IF (SELECT [RowNumberHeaderText] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [RowNumberHeaderText] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+IF (SELECT [RowNumberFixedWidth] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [RowNumberFixedWidth] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+IF (SELECT [RowNumberColumnIndex] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [RowNumberColumnIndex] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+IF (SELECT [IncludeDetailColumnHeaders] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [IncludeDetailColumnHeaders] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+IF (SELECT [StringDataWrapper] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [StringDataWrapper] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+IF (SELECT [StringDataWrapper] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [StringDataWrapper] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+IF (SELECT [DatetimeDataWrapper] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName IS NULL
+	SET @OutputText1 = CONCAT(@OutputText1,'NULL,')
+ELSE
+	SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [DatetimeDataWrapper] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+	
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [GenerateEmptyFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [PopulateImageFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
