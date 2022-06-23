@@ -88,3 +88,14 @@ ELSE
 	
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [GenerateEmptyFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [PopulateImageFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ODARImageFileFormat] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+
+SELECT @OutputText1 AS 'First Script'
+--End of first script. Take the output and run it in the target database.
+
+--Second script to add to [ACT].[dbo].[FileGenMapping]]. Pulling the same FileTypeID from the source location because it should NOT exist in the target location. If it does, then it should error.
+DECLARE @FileTypeID INT = (SELECT [ID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) 
+--FileTypeID is used as the PK for both FileGenMapping and FileTypeFilter
+DECLARE @OutputText2 VARCHAR(MAX) = 'INSERT INTO [ACT].[dbo].[FileGenMapping] (FileTypeID, FieldID, StaticValue, OutputName, Ordinal, Formatter, CalculationID, CustomCalculation, RecordTypeID, SortLevel, SortDescending, CollapseOperator)' + CHAR(13) + CHAR(10) + 'VALUES'
+--Necessary to iterate through the ordinals starting from 1.
+DECLARE @Ordinal INT = 1
