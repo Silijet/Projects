@@ -7,7 +7,8 @@ DECLARE @OutputText1 VARCHAR(MAX)
 
 --[FileExtension], [ResultStatusID], [FileHeader], [AmountFileGenMappingID], [RequiresUnixNewLine], [RowNumberHeaderText], [RowNumberFixedWidth], [RowNumberColumnIndex], [IncludeDetailColumnHeaders], [RowNumberFixedWidth], [RowNumberColumnIndex], [IncludeDetailColumnHeaders], [StringDataWrapper], [DateTimeDataWrapper] are all fields that could have NULL values. They require an IF ELSE statement.
 
-SET @OutputText1 = 'INSERT INTO [ACT].[dbo].[FileType] (ID, Name, Description, FileFormatID, NameConvention, FileExtension, Delimitor, ResultStatusID, Active, GenerateImages, FileHeader, FileDefinitionFilterTypeID, ContentTypeID, AmountFileGenMappingID, PortalVisible, IsComboFile, RequiresUnixNewline, RowNumberHeaderText, RowNumberFixedWidth, RowNumberColumnIndex, IncludeDetailColumnHeader, StringDataWrapper, DatetimeDataWrapper, GenerateEmptyFile, PopulateImageFile, ODARImageFileFormat)' + CHAR(13) + CHAR(10) + 'VALUES('
+SET @OutputText1 = 'SET IDENTITY_INSERT [ACT].[dbo].[FileType] ON;' + CHAR(13) + CHAR(10_
+SET @OutputText1 = @OutputText1 + 'INSERT INTO [ACT].[dbo].[FileType] (ID, Name, Description, FileFormatID, NameConvention, FileExtension, Delimitor, ResultStatusID, Active, GenerateImages, FileHeader, FileDefinitionFilterTypeID, ContentTypeID, AmountFileGenMappingID, PortalVisible, IsComboFile, RequiresUnixNewline, RowNumberHeaderText, RowNumberFixedWidth, RowNumberColumnIndex, IncludeDetailColumnHeader, StringDataWrapper, DatetimeDataWrapper, GenerateEmptyFile, PopulateImageFile, ODARImageFileFormat)' + CHAR(13) + CHAR(10) + 'VALUES('
 
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ID] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [Name] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
@@ -88,8 +89,9 @@ ELSE
 	
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [GenerateEmptyFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [PopulateImageFile] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
-SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ODARImageFileFormat] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''','
+SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ODARImageFileFormat] FROM [ACT].[dbo].[FileType] WHERE Name = @FileTypeName) AS VARCHAR) + ''')' + CHAR(13) + CHAR(10)
 
+SET @OutputText1 = @OutputText1 + 'SET IDENTITY_INSERT [ACT].[dbo].[FileType] OFF'
 SELECT @OutputText1 AS 'First Script'
 --End of first script. Take the output and run it in the target database.
 
