@@ -172,3 +172,5 @@ BEGIN
 END
 SELECT @OutputText2 AS "Second Script"
 --End of second script. Take the output and run it in the target database.
+
+--Third script to add to [ACT].[dbo].[FileTypeFilter]
