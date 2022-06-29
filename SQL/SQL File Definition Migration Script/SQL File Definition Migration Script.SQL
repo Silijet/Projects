@@ -95,72 +95,72 @@ SET @OutputText1 = @OutputText1 + 'SET IDENTITY_INSERT [A].[dbo].[FT] OFF'
 SELECT @OutputText1 AS 'First Script'
 --End of first script. Take the output and run it in the target database.
 
---Second script to add to [A].[dbo].[FileGenMapping]]. Pulling the same FileTypeID from the source location because it should NOT exist in the target location. If it does, then it should error.
-DECLARE @FileTypeID INT = (SELECT [ID] FROM [A].[dbo].[FileType] WHERE Name = @FileTypeName) 
---FileTypeID is used as the PK for both FileGenMapping and FileTypeFilter
-DECLARE @OutputText2 VARCHAR(MAX) = 'INSERT INTO [A].[dbo].[FileGenMapping] (FileTypeID, FieldID, StaticValue, OutputName, Ordinal, Formatter, CalculationID, CustomCalculation, RecordTypeID, SortLevel, SortDescending, CollapseOperator)' + CHAR(13) + CHAR(10) + 'VALUES'
+--Second script to add to [A].[dbo].[FGM]]. Pulling the same FileTypeID from the source location because it should NOT exist in the target location. If it does, then it should error.
+DECLARE @FileTypeID INT = (SELECT [ID] FROM [A].[dbo].[FT] WHERE Name = @FTName) 
+--FileTypeID is used as the PK for both FGM and FTF
+DECLARE @OutputText2 VARCHAR(MAX) = 'INSERT INTO [A].[dbo].[FGM] (FileTypeID, FieldID, StaticValue, OutputName, Ordinal, Formatter, CalculationID, CustomCalculation, RecordTypeID, SortLevel, SortDescending, CollapseOperator)' + CHAR(13) + CHAR(10) + 'VALUES'
 --Necessary to iterate through the ordinals starting from 1.
 DECLARE @Ordinal INT = 1
 
-WHILE EXISTS (SELECT [FileTypeID] FROM [A].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal
+WHILE EXISTS (SELECT [FileTypeID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal
 BEGIN
 --Because there may be multiple ordinals, starting with each list of values with an open parenthesis is necessary for multiple lists to be added
-	SET @OutputText2 = @OutputText2 + '(''' + CAST((SELECT [FileTypeID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
-	IF (SELECT [FieldID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	SET @OutputText2 = @OutputText2 + '(''' + CAST((SELECT [FileTypeID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+	IF (SELECT [FieldID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [FieldID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [FieldID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 	
-	IF (SELECT [StaticValue] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [StaticValue] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [StaticValue] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [StaticValue] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 	
-	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [StaticValue] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
-	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [OutputName] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
-	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [Ordinal] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [StaticValue] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [OutputName] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [Ordinal] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 	
 	
-	IF (SELECT [Formatter] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [Formatter] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [Formatter] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [Formatter] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 		
 	
-	IF (SELECT [CalculationID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [CalculationID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [CalculationID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [CalculationID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 		
 	
-	IF (SELECT [CustomCalculation] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [CustomCalculation] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [CustomCalculation] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR(MAX)) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [CustomCalculation] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR(MAX)) + ''','
 		
-	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [RecordTypeID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+	SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [RecordTypeID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 	
 	
-	IF (SELECT [SortLevel] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [SortLevel] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [SortLevel] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [SortLevel] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 	
-	IF (SELECT [SortDescending] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [SortDescending] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [SortDescending] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [SortDescending] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''','
 
---Final Field that is added needs to end iwth a closed parenthesis
+--Final Field that is added needs to end with a closed parenthesis
 
-	IF (SELECT [CollapseOperator] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
+	IF (SELECT [CollapseOperator] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) IS NULL
 		SET @OutputText2 = CONCAT(@OutputText2,'NULL')
 	ELSE
-		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [CollapseOperator] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''')'
+		SET @OutputText2 = @OutputText2 + '''' + CAST((SELECT [CollapseOperator] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal) AS VARCHAR) + ''')'
 		
 --Checking if the next ordinal exists. If it does, then a comma will be added to the end of the list and the loop will continue.
 
-	IF EXISTS (SELECT [FileTypeID] FROM [ACT].[dbo].[FileGenMapping] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal + 1)
+	IF EXISTS (SELECT [FileTypeID] FROM [A].[dbo].[FGM] WHERE FileTypeID = @FileTypeID AND Ordinal = @Ordinal + 1)
 		SET @OutputText2 = @OutputText2 + ','
 	ELSE
 		BREAK
