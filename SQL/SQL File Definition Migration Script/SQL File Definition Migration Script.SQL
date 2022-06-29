@@ -173,4 +173,16 @@ END
 SELECT @OutputText2 AS "Second Script"
 --End of second script. Take the output and run it in the target database.
 
---Third script to add to [ACT].[dbo].[FileTypeFilter]
+--Third script to add to [A].[dbo].[FTF]
+DECLARE @ID int
+DECLARE @OutputText3 VARCHAR(MAX) = 'INSERT INTO [A].[dbo].[FTF] (FileTypeID, FieldID, FilterValue, IsRange)' + CHAR(13) + CHAR(10) + 'VALUES'
+
+SELECT *
+INTO #TempFTF
+FROM [A].[dbo].[FTF]
+WHERE FileTypeID = @FileTypeID
+
+--If nothing returns from the SELECT, then EXISTS will return false. However, the table object still exists.
+WHILE EXISTS (SELECT * FROM #TempFTF)
+BEGIN
+	SET @OutputText3 = @OutputText3 + '(''' + CAST((SELECT TOP(1) [FileTypeID] FROM #TempFTF ORDER BY ID) AS VARCHAR) + ''','
