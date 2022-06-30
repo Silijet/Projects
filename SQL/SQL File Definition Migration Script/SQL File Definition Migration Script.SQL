@@ -2,12 +2,12 @@
 --The first script is to be run in the source location. It will generate an insert statement that will copy a row from the SOURCE location.
 
 --Fill @FTName
-DECLARE @FTName VARCHAR(50) = 'Subro KPS - Pending - Subrogation'
+DECLARE @FTName VARCHAR(50) = ''
 DECLARE @OutputText1 VARCHAR(MAX)
 
 --[FileExtension], [ResultStatusID], [FileHeader], [AmountFileGenMappingID], [RequiresUnixNewLine], [RowNumberHeaderText], [RowNumberFixedWidth], [RowNumberColumnIndex], [IncludeDetailColumnHeaders], [RowNumberFixedWidth], [RowNumberColumnIndex], [IncludeDetailColumnHeaders], [StringDataWrapper], [DateTimeDataWrapper] are all fields that could have NULL values. They require an IF ELSE statement.
 
-SET @OutputText1 = 'SET IDENTITY_INSERT [A].[dbo].[FT] ON;' + CHAR(13) + CHAR(10_
+SET @OutputText1 = 'SET IDENTITY_INSERT [A].[dbo].[FT] ON;' + CHAR(13) + CHAR(10)
 SET @OutputText1 = @OutputText1 + 'INSERT INTO [A].[dbo].[FT] (ID, Name, Description, FileFormatID, NameConvention, FileExtension, Delimitor, ResultStatusID, Active, GenerateImages, FileHeader, FileDefinitionFilterTypeID, ContentTypeID, AmountFileGenMappingID, PortalVisible, IsComboFile, RequiresUnixNewline, RowNumberHeaderText, RowNumberFixedWidth, RowNumberColumnIndex, IncludeDetailColumnHeader, StringDataWrapper, DatetimeDataWrapper, GenerateEmptyFile, PopulateImageFile, ODARImageFileFormat)' + CHAR(13) + CHAR(10) + 'VALUES('
 
 SET @OutputText1 = @OutputText1 + '''' + CAST((SELECT [ID] FROM [A].[dbo].[FT] WHERE Name = @FTName) AS VARCHAR) + ''','
