@@ -192,6 +192,7 @@ BEGIN
 		SET @OutputText3 = CONCAT(@OutputText3,'NULL)')
 	ELSE
 		SET @OutputText3 = @OutputText3 + '''' + CAST((SELECT TOP (1) [IsRange] FROM #TempFTF ORDER BY ID) AS VARCHAR) + ''')'
+	--Deletes the rows within the temp table as it progresses through it.
 	SET @ID = (SELECT TOP (1) ID FROM #TempFTF ORDER BY ID)
 	DELETE #TempFTF WHERE ID = @ID
 	
@@ -200,5 +201,6 @@ BEGIN
 	ELSE
 		BREAK
 END
+--After iterating through every row, it should delete the row and then finally we will need to drop the empty table.
 DROP TABLE #TempFTF
 SELECT @OutputText3 AS 'Third Script'
