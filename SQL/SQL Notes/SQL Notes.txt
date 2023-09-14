@@ -1,14 +1,56 @@
 SQL Notes:
+-----
 
 Use this for parsing a key. This can be useful if needed for creating joins off keys.
-split_part for reading a substring until a delimiter.
-SPLIT_PART(expression varchar, delimiter varchar, part_number int32)
 
-This 
+SPLIT_PART(expression varchar, delimiter varchar, part_number int32)
 Example: apprsr_key = split_part(apprsr_key , '|' , 1)
 
 substring (charindex () ) may also work but is untested.
 
-When the datetime listed is in unixtime, it needs to be converted in order for it to be read easily.
-from_unixtime(input field / amount to remove trailing zeros) --a typical amount of trailing zeros could be 6, so divide by 1000000
+-----
+
+When the datetime listed is in unixtime, it needs to be converted in order for it to be read easily. The amount of trailing zeros is variable but a typical amount is 6, so dividing by 1,000,000 is common.
+
+from_unixtime(input field / amount to remove trailing zeros)
 Example: from_unixtime(loss_dttm/1000000)
+
+-----
+
+If a field is a timestamp type, then filtering it using a conditional will require converting the input into a timestamp data type.
+
+to_timestamp (input value, return value)
+Example: WHERE crt_dttm >= to_timestamp ('01-02-2022 00:00:01' , 'dd-mm-yyyy hh24:mi:ss')
+
+-----
+
+Reading certain parts of a field. The string can be a field in a table and if length is not specified then it will read until the end.
+
+SUBSTRING(string , start , length)
+Example: SUBSTRING(status_msg , 27) AS "Relevant Error Message"
+
+-----
+
+Percentile of a dataset. Noted some strange behavior when there are duplicate or equal value scores, but this generally works well.
+
+Context: A table called STUDENTS with MARKS values that record grades
+SELECT  MARKS,
+        percent_rank() over(order by MARKS desc) as Percent_Rank
+FROM    STUDENTS
+
+A partition can also be added to rank within specific categories. Acts like a grouping.
+Context: A table with different departments, names, and rates
+SELECT    DEPARTMENT
+          ,FIRSTNAME
+          ,RATE
+          ,PERCENT_RANK() OVER(PARTITION BY Department ORDER BY Rate) AS PctRank
+FROM      HumanResources.EmployeeDepartmentHistory
+
+------
+
+Anonymizing data is sometimes tricky. Concatenate field name and combining a rank function to assign it a number can somewhat work. Instead of a real shop name, it will say something like "Shop 12" instead.
+
+Example:
+SELECT
+  concat('Shop ' , cast(rank() over (partition by company_code order by appraiser_register_id) AS varchar)) AS "Appraiser Name",
+  concat('Company ' , cast(rank() over (order by company_name desc) AS varchar)) AS "Company Name"
