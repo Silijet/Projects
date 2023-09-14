@@ -1,0 +1,10 @@
+SQL Notes:
+
+Use this for parsing a key. This can be useful if needed for creating joins off keys.
+split_part for reading a substring until a delimiter.
+SPLIT_PART(expression varchar, delimiter varchar, part_number int32)
+
+This 
+Example: apprsr_key = split_part(apprsr_key , '|' , 1)
+
+substring (charindex () ) may also work but is untested.
