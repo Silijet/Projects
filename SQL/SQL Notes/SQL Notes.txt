@@ -1,14 +1,25 @@
 SQL Notes:
+-----
 
 Use this for parsing a key. This can be useful if needed for creating joins off keys.
-split_part for reading a substring until a delimiter.
-SPLIT_PART(expression varchar, delimiter varchar, part_number int32)
 
-This 
+SPLIT_PART(expression varchar, delimiter varchar, part_number int32)
 Example: apprsr_key = split_part(apprsr_key , '|' , 1)
 
 substring (charindex () ) may also work but is untested.
 
-When the datetime listed is in unixtime, it needs to be converted in order for it to be read easily.
-from_unixtime(input field / amount to remove trailing zeros) --a typical amount of trailing zeros could be 6, so divide by 1000000
+-----
+
+When the datetime listed is in unixtime, it needs to be converted in order for it to be read easily. The amount of trailing zeros is variable but a typical amount is 6, so dividing by 1,000,000 is common.
+
+from_unixtime(input field / amount to remove trailing zeros)
 Example: from_unixtime(loss_dttm/1000000)
+
+-----
+
+If a field is a timestamp type, then filtering it using a conditional will require converting the input into a timestamp data type.
+
+to_timestamp (input value, return value)
+Example: WHERE crt_dttm >= to_timestamp ('01-02-2022 00:00:01' , 'dd-mm-yyyy hh24:mi:ss')
+
+-----
