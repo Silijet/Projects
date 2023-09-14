@@ -25,8 +25,8 @@ WHERE
 
 --2) Show the CompanyName for all customers with an address in City 'Dallas'.
 --Output | CompanyName |
---Where city is located in Dallas
--- CompanyName from customer, city is in address, linked through salesorderheader or customeraddress
+--Where City = Dallas
+-- CompanyName from [Customer], City is from [Address], linked through [CustomerAddress] via AddressID and CustomerID
 
 SELECT cust.companyname
 FROM 
