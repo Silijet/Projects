@@ -32,21 +32,42 @@ FROM    patients
 ORDER BY len(first_name), first_name asc
 
 --6. Show the total amount of male patients and the total amount of female patients in the patients table. Display the two results in the same row.
+Nested Select statements
 
 --7. Show first and last name, allergies from patients which have allergies to either 'Penicillin' or 'Morphine'. 
 --Show results ordered ascending by allergies then by first_name then by last_name.
+SELECT 	first_name,last_name,allergies
+FROM 	patients
+WHERE 	allergies in ('Penicillin','Morphine')
+ORDER BY allergies,first_name,last_name
 
 --8. Show patient_id, diagnosis from admissions. Find patients admitted multiple times for the same diagnosis.
 
+
 --9. Show the city and the total number of patients in the city.
 --Order from most to least patients and then by city name ascending.
+SELECT 	city, count(*) as 'number_of_patients'
+FROM 	patients
+GROUP BY city
+ORDER BY number_of_patients DESC, city ASC
 
 --10. Show first name, last name and role of every person that is either patient or doctor.
 --The roles are either "Patient" or "Doctor"
+SELECT 	first_name, last_name, "Patient" AS 'Role'
+FROM 	patients
+UNION ALL --Allows duplicate values
+SELECT 	first_name, last_name, "Doctor" AS 'Role'
+FROM 	doctors
 
 --11. Show all allergies ordered by popularity. Remove 'NKA' and NULL values from query.
+SELECT 	allergies, COUNT(*) as 'Number'
+FROM 	patients
+WHERE 	allergies != 'NKA'
+AND 	allergies is not null 
+ORDER BY Number DESC 
 
 --12. Show all patient's first_name, last_name, and birth_date who were born in the 1970s decade. Sort the list starting from the earliest birth_date.
+
 
 --13. We want to display each patient's full name in a single column. Their last_name in all upper letters must appear first, then first_name in all lower case letters. Separate the last_name and first_name with a comma. Order the list by the first_name in decending order
 --EX: SMITH,jane
