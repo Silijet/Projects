@@ -50,7 +50,14 @@ WHERE 	allergies in ('Penicillin','Morphine')
 ORDER BY allergies,first_name,last_name
 
 --8. Show patient_id, diagnosis from admissions. Find patients admitted multiple times for the same diagnosis.
-HAVING COUNT
+SELECT
+  patient_id,
+  diagnosis
+FROM admissions
+GROUP BY
+  patient_id,
+  diagnosis
+HAVING COUNT(*) > 1
 	
 --9. Show the city and the total number of patients in the city.
 --Order from most to least patients and then by city name ascending.
@@ -168,11 +175,51 @@ GROUP BY
 	doc.first_name,doc.last_name
 
 --20. For each doctor, display their id, full name, and the first and last admission date they attended.
+--doctor_id | first_name + last_name | first_admission | last_admission
+SELECT
+  d.doctor_id,
+  a.first_name || ' ' || a.last_name AS 'full_name', --CONCAT(d.first_name,' ',d.last_name)
+  min(admission_date) AS 'first_admission',
+  max(admission_date) AS 'last_admission'
+FROM admissions a
+  JOIN doctors d ON a.attending_doctor_id = d.doctor_id
+GROUP BY
+	doctor_id
 
 --21. Display the total amount of patients for each province. Order by descending.
+--province | total_patients
+SELECT
+	province_name
+	,COUNT(*) AS 'total_patients'
+FROM
+	province_names pn
+JOIN 	patients p ON pn.province_id = p.province_id
+GROUP BY
+	province_name
+ORDER BY COUNT(*) DESC
 
 --22. For every admission, display the patient's full name, their admission diagnosis, and their doctor's full name who diagnosed their problem.
+SELECT
+	p.first_name || ' ' || p.last_name as 'patient_full_name'
+	,a.diagnosis
+	,d.first_name || ' ' || d.last_name as 'doctor_full_name'
+FROM 	patients
+JOIN 	admissions 
+	ON admissions.patient_id = patients.patient_id
+JOIN 	doctors 
+	ON doctors.doctor_id = admissions.attending_doctor_id
+
 --23. Display the first name, last name and number of duplicate patients based on their first name and last name.
+SELECT
+  first_name,
+  last_name,
+  COUNT(*) AS 'duplicates'
+FROM patients
+GROUP BY
+  first_name, last_name
+HAVING COUNT(*) > 1
+
+
 /*24. Display patient's full name,
 height in the unit feet rounded to 1 decimal,
 weight in the unit pounds rounded to 0 decimals,
@@ -181,6 +228,37 @@ gender non abbreviated.
 
 Convert CM to feet by dividing by 30.48.
 Convert KG to pounds by multiplying by 2.205.*/
+SELECT
+	first_name || ' ' || last_name
+    	,round((height / 30.48),1)
+    	,round((weight * 2.205),0)
+    	,birth_date
+    	,CASE 
+    		WHEN gender = 'F' THEN 'Female'
+        	WHEN gender = 'M' THEN 'Male'
+        END AS 'gender'
+FROM
+	patients
 
 --25. Show patient_id, first_name, last_name from patients whose does not have any records in the admissions table. 
 --(Their patient_id does not exist in any admissions.patient_id rows.)
+--patient_id | first name | last name
+SELECT
+  patients.patient_id,
+  first_name,
+  last_name
+FROM patients p
+LEFT OUTER JOIN admissions a ON --LEFT OUTER JOIN is not supported in their webapp. This is just doing a LEFT JOIN so that's why the WHERE statement is necessary.
+	(p.patient_id = a.patient_id)
+WHERE a.admission_date IS NULL
+
+--ALTERNATE SOLUTION
+SELECT
+  patients.patient_id,
+  first_name,
+  last_name
+from patients
+where patients.patient_id not in (
+    select admissions.patient_id
+    from admissions
+  )
