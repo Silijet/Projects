@@ -1,5 +1,5 @@
 #Exercise 1
-#Create a program that asks the user to enter their name and their age. Print out a message addressed to them that tells them the year that they will turn 100 years old. Note: for this exercise, the expectation is that you explicitly write out the year (and therefore be out of date the next year). If you want to do this in a generic way, see exercise 39.
+#  Create a program that asks the user to enter their name and their age. Print out a message addressed to them that tells them the year that they will turn 100 years old. Note: for this exercise, the expectation is that you explicitly write out the year (and therefore be out of date the next year). If you want to do this in a generic way, see exercise 39.
 
 #Extras:
 #    Add on to the previous program by asking the user for another number and printing out that many copies of the previous message. (Hint: order of operations exists in Python)
@@ -33,3 +33,21 @@ try:
     print("This number is odd")
 except ValueError:
   print("Please enter a valid integer.")
+
+#Exercise 3
+#  Take a list, say for example this one:
+#  a = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+#  and write a program that prints out all the elements of the list that are less than 5.
+
+#Extras:
+#    Instead of printing the elements one by one, make a new list that has all the elements less than 5 from this list in it and print out this new list.
+#    Write this in one line of Python.
+#    Ask the user for a number and return a list that contains only elements from the original list a that are smaller than that number given by the user.
+
+a = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+b = []
+less_than = int(input("All elements from the list that are less than this value will be extracted: "))
+for element in a:
+  if element < less_than:
+    b.append(element)
+print(b)
