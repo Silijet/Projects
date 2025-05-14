@@ -51,3 +51,19 @@ for element in a:
   if element < less_than:
     b.append(element)
 print(b)
+
+#Exercise 4
+#  Create a program that asks the user for a number and then prints out a list of all the divisors of that number. 
+try:
+  input_number = int(input("What number would you like to see all factors? "))
+  x = range(1, input_number+1)
+  y = []
+  
+  for elem in x:
+    if input_number % elem == 0:
+      y.append(elem)
+  
+  print("The factors of {input_number} are: {y}")
+
+except ValueError:
+  print("Please enter a valid integer.")
