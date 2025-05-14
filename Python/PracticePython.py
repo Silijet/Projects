@@ -68,7 +68,7 @@ try:
 except ValueError:
   print("Please enter a valid integer.")
 
-  
+
 #Exercise 5
 #  Take two lists and write a program that returns a list that contains only the elements that are common between the lists (without duplicates). Make sure your program works on two lists of different sizes.
 
@@ -80,7 +80,7 @@ d = []
 for elem in a:
   if elem not in c:
     c.append(elem)
-    
+  
 try:
   for elem in b:
     if elem in c:
