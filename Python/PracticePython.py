@@ -88,3 +88,13 @@ try:
   print(f"Common elements: {d}")
 except Exception as e:
   print("An error occurred:", e)
+#This is just an intersection set problem
+return list(set(a) & set(b))
+
+#Exercise 6
+#  Ask the user for a string and print out whether this string is a palindrome or not.
+check_palindrome = input("What word would you like to check if it is a palindrome? ")
+  if check_palindrome[0:] == check_palindrome[::-1]:
+    print("Yes this is a palindrome!")
+  else: 
+    print("No this is not a palindrome.")
