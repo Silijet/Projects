@@ -1,4 +1,4 @@
-Histogram of Tweets
+--Histogram of Tweets
 
 SELECT 
   distinct (tweets_num) AS tweet_bucket, 
